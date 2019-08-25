@@ -1,0 +1,55 @@
+# CS229学习笔记
+本项目创建于2019/8/17，用代码跟进吴恩达教授于2009的CS229，在此十分感谢**ML**的先驱和后继的贡献以及对于后来者的扶持。
+#
+本项目为博主在进入研一的前一个暑假所写，难免存在错误或者结构不合理的地方，还望海涵和斧正。
+
+---------------
+CPY
+------------
+
+```
+import numpy as np
+
+
+class LinearRegression:
+    def __init__(self, x, y):  # 先不处理数据类型 仅处理是否合法 空也没处理  x为1*N也没有判定
+        if x.size/x.ndim == y.size/y.ndim:
+            self.nfeature = x.ndim
+            self.nsample = x.size/self.nfeature
+            self.ndim = self.nfeature + 1
+
+            self.__X = x
+            self.__Y = y
+            self.__theta = np.zeros([self.ndim, 1])
+        else:
+            pass
+
+    def __str__(self):
+        print(self.__X)
+        return 'test completed\n'
+
+    def nomarlize(self):# 方差为零的情况没处理
+
+        self.nX = (self.__X - np.tile(np.average(self.__X, 0), (self.nsample, 1))) / \
+                  np.tile(np.std(self.__X, 0), (self.nsample, 1))
+        # self.nY = (self.__Y - np.tile(np.average(self.__Y, 0), (self.__Y.size/self.__Y.ndim, 1))) / \
+        #           np.tile(np.std(self.__Y, 0), (self.__Y.size/self.__Y.ndim, 1))
+        self.nX = np.vstack((np.ones((1,self.__X.shape[1])), self.nX))
+
+
+    def hypothesis(self, x, theta):
+        # 这里认为输入均为合理的
+        return theta.T.dot(x)
+
+    def cost(self,x,theta):
+        np.sum()
+        pass
+
+a = np.array([[1, 2, 3], [4, 5, 6]])
+b = np.array([3, 4, 5])
+test = LinearRegression(a, b)
+print(test)
+test.nomarlize()
+print(test.nX)
+print(test.nY)
+```
