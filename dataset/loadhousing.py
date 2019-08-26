@@ -1,5 +1,5 @@
 import numpy as np
-from TrainTestDivide import TTDivide
+from dataset.TrainTestDivide import TTDivide
 
 class loadhousing(object):
     def __init__(self):

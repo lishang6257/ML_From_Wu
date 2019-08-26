@@ -9,9 +9,10 @@ shape[0]返回各个维度元素个数
 '''
 
 import numpy as np
-import sys
-import os
+import matplotlib.pyplot as plt
+
 from dataset.loadhousing import loadhousing
+
 
 
 class LinearRegression(object):
@@ -21,9 +22,12 @@ class LinearRegression(object):
         :param x: R(N*M). N为维数/特征个数，M为样本个数;若为一维数组按1*m计算
         :param y: R(a*b). 若为一维向量，按1*b计算
         '''
+        self.__maxIter = 200
         self.__Epsilon = 10**-3
-        self.__LearningRate = 0.1
-        self.__Fnormalize = False
+        self.__LearningRate = 0.005
+        self.__Fnormalize = 0
+        self.__Fplot = 0
+        self.__plot = np.zeros([self.__maxIter,])
         if x.ndim == 1:
             x = x.reshape(1,x.size)
         if y.ndim == 1:
@@ -38,6 +42,7 @@ class LinearRegression(object):
             self.__theta = np.zeros([self.nfeature + 1, 1])
             self.__nX = np.zeros(self.__X.shape)
             self.__nY = np.zeros(self.__Y.shape)
+
         else:
             return 'Error input nsample in X | Y，check them;\n'
 
@@ -51,6 +56,10 @@ class LinearRegression(object):
     def setEpsilon(self,epsilon):
         self.__Epsilon = epsilon
 
+    def setMaxIteration(self,iter):
+        self.__maxIter = iter
+        self.__plot = np.zeros([iter,])
+
     def normalize(self,jobs = 1):
         '''
         X:由于常数项已经堆叠，因此从第二个特征进行正则化
@@ -60,7 +69,7 @@ class LinearRegression(object):
         :return:
         '''
         if jobs == 1:
-            self.__Fnormalize = True
+            self.__Fnormalize = 1
             index = -1
             for xx in self.__X:
                 index += 1
@@ -76,7 +85,7 @@ class LinearRegression(object):
                     self.__nY[index, :] = (yy - np.mean(yy)) / std
 
         if jobs == 2:
-            self.__Fnormalize = True
+            self.__Fnormalize = 2
             index = -1
             for xx in self.__X:
                 index += 1
@@ -114,7 +123,7 @@ class LinearRegression(object):
     def cost(self,x,theta,y):
         return np.sum((self.hypothesis(x, theta) - y)**2)/2
 
-    def fit(self,jobs = 1):
+    def train(self,jobs = 1):
         '''
         jobs = 1
         梯度下降法
@@ -130,21 +139,43 @@ class LinearRegression(object):
             YY = self.__Y
 
         if jobs == 1:
+            self.__Fplot = 1
+            index = -1
             delta = 10000
             last =  10000 + self.cost(XX,self.__theta,YY)
-            while delta >= self.__Epsilon:
+            # while (delta >= self.__Epsilon) | (index < 99):
+            while index < self.__maxIter - 1:
+                index += 1
                 CurrentCost = self.cost(XX,self.__theta,YY)
                 self.__theta -= self.__LearningRate*np.sum((self.hypothesis(XX, self.__theta) - YY)*XX,1).reshape(self.nfeature+1, 1)
-                delta = last - CurrentCost
+                delta = abs(last - CurrentCost)
+                last = CurrentCost
+                self.__plot[index] = CurrentCost
+                print(delta)
+
+    def test(self,x,y):
+    # self.__X1 = np.vstack((np.ones([1, self.nsample]), x1))
+    # self.__Y1 = y
+    # self.__nX1 = np.zeros(self.__X1.shape)
+    # self.__nY1 = np.zeros(self.__Y1.shape)
+
+
+    def plot(self):
+        x = np.arange(0,self.__maxIter)
+        plt.plot(x,self.__plot)
+        # plt.legend(), ls="-", lw=2, label="plot figure"
+        plt.show()
+
 
 
 a = loadhousing()
-
-
 LR = LinearRegression(a.data['train']['X'],a.data['train']['Y'])
 LR.normalize(1)
-LR.fit(1)
-print(LR)
+LR.setLearningRate(0.003)
+LR.setMaxIteration(1000)
+LR.train(1)
+LR.plot()
+# print(LR)
 
 
 
