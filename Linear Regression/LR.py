@@ -141,7 +141,7 @@ class LinearRegression(object):
 a = loadhousing()
 
 
-LR = LinearRegression(a.data['X'],a.data['Y'])
+LR = LinearRegression(a.data['train']['X'],a.data['train']['Y'])
 LR.normalize(1)
 LR.fit(1)
 print(LR)

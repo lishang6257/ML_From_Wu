@@ -46,5 +46,5 @@ class loadhousing(object):
 
 
 # a = loadhousing()
-# print(a.data['X'])
+# print(a.data['test']['X'])
 # print(a.attribute['X'])
