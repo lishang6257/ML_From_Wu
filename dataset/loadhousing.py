@@ -1,4 +1,5 @@
 import numpy as np
+from TrainTestDivide import TTDivide
 
 class loadhousing(object):
     def __init__(self):
@@ -21,14 +22,29 @@ class loadhousing(object):
 
 
         __Afile = open(self.__attribute,'r')
-        Attribute = {}
+        AttributeX = {}
+        AttributeY = {}
+        index = -1
         for line in __Afile:
+            index += 1
             ldata = line.split()
             describe = ldata[1]
             for i in range(2,len(ldata),1):
                 describe += ' ' + ldata[i]
-            Attribute[ldata[0]] = describe
+
+            if index in self.__Xrange:
+                AttributeX[ldata[0]] = describe
+            elif index in self.__Yrange:
+                AttributeY[ldata[0]] = describe
         __Afile.close()
 
         self.data = {'X':Data[self.__Xrange,:],'Y':Data[self.__Yrange,:]}
-        self.attribute = {'X':Attribute[self.__Xrange,:],'Y':Attribute[self.__Yrange,:]}
+        self.attribute = {'X':AttributeX,'Y':AttributeY}
+
+        self.data = TTDivide(self.data)
+
+
+
+# a = loadhousing()
+# print(a.data['X'])
+# print(a.attribute['X'])

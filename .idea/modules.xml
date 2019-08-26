@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../3DDFA-master/.idea/3DDFA-master.iml" filepath="$PROJECT_DIR$/../3DDFA-master/.idea/3DDFA-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../3DMM-ZHU-behind/.idea/3DMM-ZHU-behind.iml" filepath="$PROJECT_DIR$/../3DMM-ZHU-behind/.idea/3DMM-ZHU-behind.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/ML From Wu.iml" filepath="$PROJECT_DIR$/.idea/ML From Wu.iml" />
+    </modules>
+  </component>
+</project>

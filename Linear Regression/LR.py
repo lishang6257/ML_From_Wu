@@ -65,14 +65,14 @@ class LinearRegression(object):
             for xx in self.__X:
                 index += 1
                 std = np.std(xx)
-                if xx != 0:
+                if std != 0:
                     self.__nX[index,:] = (xx - np.mean(xx)) / std
 
             index = -1
             for yy in self.__Y:
                 index += 1
                 std = np.std(yy)
-                if yy != 0:
+                if std != 0:
                     self.__nY[index, :] = (yy - np.mean(yy)) / std
 
         if jobs == 2:
@@ -134,7 +134,7 @@ class LinearRegression(object):
             last =  10000 + self.cost(XX,self.__theta,YY)
             while delta >= self.__Epsilon:
                 CurrentCost = self.cost(XX,self.__theta,YY)
-                # self.__theta -= self.__LearningRate*np.sum((self.hypothesis(XX, self.__theta) - YY))
+                self.__theta -= self.__LearningRate*np.sum((self.hypothesis(XX, self.__theta) - YY)*XX,1).reshape(self.nfeature+1, 1)
                 delta = last - CurrentCost
 
 
@@ -142,6 +142,8 @@ a = loadhousing()
 
 
 LR = LinearRegression(a.data['X'],a.data['Y'])
+LR.normalize(1)
+LR.fit(1)
 print(LR)
 
 
