@@ -158,6 +158,7 @@ class LinearRegression(object):
     # self.__Y1 = y
     # self.__nX1 = np.zeros(self.__X1.shape)
     # self.__nY1 = np.zeros(self.__Y1.shape)
+        pass
 
 
     def plot(self):
