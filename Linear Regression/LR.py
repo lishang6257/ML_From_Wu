@@ -11,12 +11,14 @@ shape[0]返回各个维度元素个数
 import numpy as np
 import matplotlib.pyplot as plt
 
+from utils.normalize import normalize,inverseTransform
+from utils.validDataset import validDataset
 from dataset.loadhousing import loadhousing
 
 
 
 class LinearRegression(object):
-    def __init__(self,x,y):
+    def __init__(self,data,axis = 0):
         '''
         初始化类LR的维度，输入，输出等信息
         :param x: R(N*M). N为维数/特征个数，M为样本个数;若为一维数组按1*m计算
@@ -25,29 +27,26 @@ class LinearRegression(object):
         self.__maxIter = 200
         self.__Epsilon = 10**-3
         self.__LearningRate = 0.005
-        self.__Fnormalize = 0
-        self.__Fplot = 0
-        self.__plot = np.zeros([self.__maxIter,])
-        if x.ndim == 1:
-            x = x.reshape(1,x.size)
-        if y.ndim == 1:
-            y = y.reshape(1,y.size)
-        if x.ndim != 2 | y.ndim != 2:
-            return 'Error input ndim in X | Y，checke them;\n'
-        if x.shape[1] == y.shape[1]:
-            self.nfeature = x.shape[0]
-            self.nsample = x.shape[1]
-            self.__X = np.vstack((np.ones([1,self.nsample]),x))
-            self.__Y = y
-            self.__theta = np.zeros([self.nfeature + 1, 1])
-            self.__nX = np.zeros(self.__X.shape)
-            self.__nY = np.zeros(self.__Y.shape)
 
+        self.__normalizeJob = 1
+        self.__regressJob = 1
+
+        self.__plot = np.zeros([self.__maxIter,])
+
+        [flag,data] = validDataset(data,axis)
+
+        if flag == True:
+            self.trainData = data['train']
+            self.testData = data['test']
+            self.nfeature = self.trainData['X'].shape[0]
+            self.trainNsample = self.trainData['X'].shape[1]
+            self.testNsample = self.testData['X'].shape[1]
+            self.__theta = np.zeros([self.nfeature + 1, 1])
         else:
-            return 'Error input nsample in X | Y，check them;\n'
+            return False
 
     def __str__(self):
-        print(self.__X.shape,self.__Y.shape,self.__theta.shape)
+        print(self.trainData['X'].shape,self.trainData['Y'].shape)
         return 'init completely'
 
     def setLearningRate(self,mui):
@@ -60,49 +59,6 @@ class LinearRegression(object):
         self.__maxIter = iter
         self.__plot = np.zeros([iter,])
 
-    def normalize(self,jobs = 1):
-        '''
-        X:由于常数项已经堆叠，因此从第二个特征进行正则化
-        y:直接正则化
-
-        由于假设中数据服从正太分布，这里将数据分布修正成标准正态分布
-        :return:
-        '''
-        if jobs == 1:
-            self.__Fnormalize = 1
-            index = -1
-            for xx in self.__X:
-                index += 1
-                std = np.std(xx)
-                if std != 0:
-                    self.__nX[index,:] = (xx - np.mean(xx)) / std
-
-            index = -1
-            for yy in self.__Y:
-                index += 1
-                std = np.std(yy)
-                if std != 0:
-                    self.__nY[index, :] = (yy - np.mean(yy)) / std
-
-        if jobs == 2:
-            self.__Fnormalize = 2
-            index = -1
-            for xx in self.__X:
-                index += 1
-                min = np.min(xx)
-                max = np.max(xx)
-                if max != min:
-                    self.__nX[index,:] = (xx - min*np.ones(xx.shape)) / (max - min)
-
-            index = -1
-            for yy in self.__Y:
-                index += 1
-                min = np.min(yy)
-                max = np.max(yy)
-                if max != min:
-                    self.__nY[index, :] = (yy - min * np.ones(yy.shape)) / (max - min)
-
-
     def hypothesis(self,x,theta):
         '''
         :param x: n*m
@@ -111,19 +67,10 @@ class LinearRegression(object):
         '''
         return theta.T.dot(x)
 
-    # def hypothesis(self,x,n,theta):
-    #     '''
-    #     :param x: n*m
-    #     :param n: 下标；表征求解第n个样本
-    #     :param theta: n*1
-    #     :return: 第n的样本的函数值
-    #     '''
-    #     return theta.T.dot(x[:,n])
-
     def cost(self,x,theta,y):
         return np.sum((self.hypothesis(x, theta) - y)**2)/2
 
-    def train(self,jobs = 1):
+    def train(self,regressJobs = 1,normalizeJob = 1):
         '''
         jobs = 1
         梯度下降法
@@ -131,34 +78,46 @@ class LinearRegression(object):
         正规方程法
         :return:
         '''
-        if self.__Fnormalize == True:
-            XX = self.__nX
-            YY = self.__nY
-        else:
-            XX = self.__X
-            YY = self.__Y
+        self.__regressJob = regressJobs
+        self.__normalizeJob = normalizeJob
 
-        if jobs == 1:
-            self.__Fplot = 1
+        [XX, self.__XNormalPar] = normalize(self.trainData['X'], normalizeJob)
+        XX = np.vstack([np.ones([1,self.trainNsample]),XX])
+        YY = self.trainData['Y']
+        # [YY, self.__YNormalPar] = normalize(self.trainData['Y'], normalizeJob)
+
+
+        if regressJobs == 1:
             index = -1
             delta = 10000
             last =  10000 + self.cost(XX,self.__theta,YY)
-            # while (delta >= self.__Epsilon) | (index < 99):
-            while index < self.__maxIter - 1:
+            while (index < self.__maxIter - 1) & (delta > self.__Epsilon):
                 index += 1
                 CurrentCost = self.cost(XX,self.__theta,YY)
-                self.__theta -= self.__LearningRate*np.sum((self.hypothesis(XX, self.__theta) - YY)*XX,1).reshape(self.nfeature+1, 1)
+                self.__theta -= self.__LearningRate/self.trainNsample*np.sum((self.hypothesis(XX, self.__theta) - YY)*XX,1).reshape(self.nfeature+1, 1)
                 delta = abs(last - CurrentCost)
                 last = CurrentCost
+                if CurrentCost > last:
+                    print('bigger')
                 self.__plot[index] = CurrentCost
-                print(delta)
+                # print(delta)
+        elif regressJobs == 2:
+            pass
+        else :
+            pass
 
-    def test(self,x,y):
-    # self.__X1 = np.vstack((np.ones([1, self.nsample]), x1))
-    # self.__Y1 = y
-    # self.__nX1 = np.zeros(self.__X1.shape)
-    # self.__nY1 = np.zeros(self.__Y1.shape)
-        pass
+    def test(self):
+        [XX,XNormalPar] = normalize(self.testData['X'], self.__normalizeJob)
+        XX = np.vstack([np.ones([1, self.testNsample]), XX])
+        tYY = self.hypothesis(XX,self.__theta)
+        # itt = inverseTransform(tYY, self.__YNormalPar, self.__normalizeJob)
+        # self.testCost = np.sum((itt - self.testData['Y'])**2)/self.testNsample
+
+        itt = tYY
+        self.testCost = np.sum((itt - self.testData['Y']) ** 2) / self.testNsample
+        return itt
+
+    # 求解时使用平均绝对误差，并不能用总和，否则容易溢出，且对学习率有不一样的要求
 
 
     def plot(self):
@@ -168,15 +127,18 @@ class LinearRegression(object):
         plt.show()
 
 
+if __name__ == '__main__':
+    a = loadhousing()
+    LR = LinearRegression(a.data,0)
+    LR.setLearningRate(0.1)
+    LR.setMaxIteration(1000)
+    LR.setEpsilon(10**-5)
+    LR.train(1,2)
+    tt = LR.test()
+    print(LR.testCost)
+    LR.plot()
+    print(LR)
 
-a = loadhousing()
-LR = LinearRegression(a.data['train']['X'],a.data['train']['Y'])
-LR.normalize(1)
-LR.setLearningRate(0.003)
-LR.setMaxIteration(1000)
-LR.train(1)
-LR.plot()
-# print(LR)
 
 
 
