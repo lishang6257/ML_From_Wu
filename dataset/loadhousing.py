@@ -1,50 +1,50 @@
 import numpy as np
-from dataset.TrainTestDivide import TTDivide
+from dataset.TrainTestDivide import train_test_divide
 
-class loadhousing(object):
+
+class LoadHousing(object):
     def __init__(self):
-        self.ndim = np.array([14,506])
-        self.__Xrange = np.arange(0,13)
+        self.ndim = np.array([14, 506])
+        self.__Xrange = np.arange(0, 13)
         self.__Yrange = np.array([13])
         self.__data = r'D:\programer\DataSet\ML\housing\housing.data'
         self.__attribute = r'D:\programer\DataSet\ML\housing\housing.attribute'
 
     # def load(self):
-        __Dfile = open(self.__data,'r')
-        Data = np.zeros(self.ndim)
+        dfile = open(self.__data, 'r')
+        data = np.zeros(self.ndim)
         index = 0
-        for line in __Dfile:
+        for line in dfile:
             ldata = line.split()
             ldata = [float(x) for x in ldata]
-            Data[:,index] = ldata
+            data[:, index] = ldata
             index += 1
-        __Dfile.close()
+        dfile.close()
 
-
-        __Afile = open(self.__attribute,'r')
-        AttributeX = {}
-        AttributeY = {}
+        afile = open(self.__attribute, 'r')
+        attribute_x = {}
+        attribute_y = {}
         index = -1
-        for line in __Afile:
+        for line in afile:
             index += 1
             ldata = line.split()
             describe = ldata[1]
-            for i in range(2,len(ldata),1):
+            for i in range(2, len(ldata), 1):
                 describe += ' ' + ldata[i]
 
             if index in self.__Xrange:
-                AttributeX[ldata[0]] = describe
+                attribute_x[ldata[0]] = describe
             elif index in self.__Yrange:
-                AttributeY[ldata[0]] = describe
-        __Afile.close()
+                attribute_y[ldata[0]] = describe
+        afile.close()
 
-        self.data = {'X':Data[self.__Xrange,:],'Y':Data[self.__Yrange,:]}
-        self.attribute = {'X':AttributeX,'Y':AttributeY}
+        self.data = {'X': data[self.__Xrange, :], 'Y': data[self.__Yrange, :]}
+        self.attribute = {'X': attribute_x, 'Y': attribute_y}
 
-        self.data = TTDivide(self.data)
+        self.data = train_test_divide(self.data)
 
 
-
-# a = loadhousing()
-# print(a.data['test']['X'])
-# print(a.attribute['X'])
+if __name__ == '__main__':
+    a = LoadHousing()
+    print(a.data['test']['X'])
+    print(a.attribute['X'])

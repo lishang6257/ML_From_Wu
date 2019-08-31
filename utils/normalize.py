@@ -1,93 +1,127 @@
-import numpy as np
-'''
-[nx,normalPar] = normalize(x,jobs = 1,axis = 1)
+"""
+[nx,normal_par] = normalize(x,jobs = 1,axis = 1)
 正则化 数据
 jobs 1:mui-sigama
-jobs 2:min-max
+jobs 2:min_par-max_par
 否则 返回原数据
-nx：正则化后的数据
-normalPar:
+nx：标准化后的数据
+normal_par:
 jobs 1 ：返回［mui, sigma］
-jobs 2 : 返回 [min, max - min]
+jobs 2 : 返回 [min_par, max_par - min_par]
 
-默认对一行一行数据正则化
-默认方法为jobs 1 
+默认对一行一行数据标准化
+默认方法为jobs 1
 
-inverseTransform(x,normalPar,jobs = 1,axis = 0)
+inverse_transform(x,normal_par,jobs = 1,axis = 0)
+"""
+
+import numpy as np
 
 
-'''
-
-def normalize(x,jobs = 1,axis = 1):
-    if axis == 1:#行优先,且只考虑了二维向量的情况
-        X = x
+def normalize(x, jobs=1, axis=1):
+    if axis == 1:  # 行优先,且只考虑了二维向量的情况
+        xx = x
     else:
-        X = x.T
-    nX = np.zeros(X.shape)
-    normalPar = np.zeros([X.shape[0], 2])
-    normalPar[:,1] = np.ones([X.shape[0], ])
-    if jobs == 1:#job1 : mui-sigma 便准化； job2 :极差标准化
+        xx = x.T
+    nx = np.zeros(xx.shape)
+    if jobs == 1:  # job1 : mui-sigma 便准化； job2 :极差标准化
         index = -1
-        for xx in X:
+        for x_line in xx:
             index += 1
-            std = np.std(xx)
-            mean = np.mean(xx)
+            std = np.std(x_line)
+            mean = np.mean(x_line)
             if std != 0:
-                nX[index, :] = (xx - mean) / std
-                normalPar[index, :] = [mean,std]
+                nx[index, :] = (x_line - mean) / std
             else:
-                nX[index, :] = xx
-                normalPar[index, :] = [0, 1]
+                nx[index, :] = x_line
     elif jobs == 2:
         index = -1
-        for xx in X:
+        for x_line in xx:
             index += 1
-            min = np.min(xx)
-            max = np.max(xx)
-            if max != min:
-                nX[index, :] = (xx - min * np.ones(xx.shape)) / (max - min)
-                normalPar[index, :] = [min, max - min]
+            min_par = np.min(x_line)
+            max_par = np.max(x_line)
+            if max_par != min_par:
+                nx[index, :] = (x_line - min_par * np.ones(x_line.shape)) / (max_par - min_par)
             else:
-                nX[index, :] = xx
-                normalPar[index, :] = [0, 1]
+                nx[index, :] = x_line
     else:
-        if axis == 1:
-            return x, normalPar
-        else:
-            return x, normalPar.T
+        return x
 
-    if axis == 1:#行优先,且只考虑了二维向量的情况
-        return nX, normalPar
+    if axis == 1:  # 行优先,且只考虑了二维向量的情况
+        return nx
     else:
-        return nX.T, normalPar.T
+        return nx.T
 
-def inverseTransform(x,normalPar,jobs = 1,axis = 1):
-    if axis == 1:#行优先,且只考虑了二维向量的情况
-        X = x
-        NormalPar = normalPar
+
+# def normalize(x, jobs=1, axis=1, can_inverse=1):
+#     if axis == 1:  # 行优先,且只考虑了二维向量的情况
+#         xx = x
+#     else:
+#         xx = x.T
+#     nx = np.zeros(xx.shape)
+#     normal_par = np.zeros([xx.shape[0], 2])
+#     normal_par[:, 1] = np.ones([xx.shape[0], ])
+#     if jobs == 1:  # job1 : mui-sigma 便准化； job2 :极差标准化
+#         index = -1
+#         for x_line in xx:
+#             index += 1
+#             std = np.std(x_line)
+#             mean = np.mean(x_line)
+#             if std != 0:
+#                 nx[index, :] = (x_line - mean) / std
+#                 normal_par[index, :] = [mean, std]
+#             else:
+#                 nx[index, :] = x_line
+#                 normal_par[index, :] = [0, 1]
+#     elif jobs == 2:
+#         index = -1
+#         for x_line in xx:
+#             index += 1
+#             min_par = np.min(x_line)
+#             max_par = np.max(x_line)
+#             if max_par != min_par:
+#                 nx[index, :] = (x_line - min_par * np.ones(x_line.shape)) / (max_par - min_par)
+#                 normal_par[index, :] = [min_par, max_par - min_par]
+#             else:
+#                 nx[index, :] = x_line
+#                 normal_par[index, :] = [0, 1]
+#     else:
+#         if axis == 1:
+#             return x, normal_par
+#         else:
+#             return x, normal_par.T
+#
+#     if axis == 1:  # 行优先,且只考虑了二维向量的情况
+#         return nx, normal_par
+#     else:
+#         return nx.T, normal_par.T
+
+
+def inverse_transform(x, normal_par, jobs=1, axis=1):
+    if axis == 1:  # 行优先,且只考虑了二维向量的情况
+        xx = x
+        normal_par = normal_par
     else:
-        X = x.T
-        NormalPar = normalPar.T
-    inverse = np.zeros(X.shape)
+        xx = x.T
+        normal_par = normal_par.T
+    inverse = np.zeros(xx.shape)
     index = -1
-    for xx in X:
+    for x_line in xx:
         index += 1
-        inverse[index,:] = xx * NormalPar[index,1] + NormalPar[index, 0]
-    if axis == 1:#行优先,且只考虑了二维向量的情况
+        inverse[index, :] = x_line * normal_par[index, 1] + normal_par[index, 0]
+    if axis == 1:  # 行优先,且只考虑了二维向量的情况
         return inverse
     else:
         return inverse.T
 
 
-
-
 if __name__ == '__main__':
-    x = np.array([[1,3,6,5],[1,1,1,1],[1,0,0,-1]])
+    X = np.array([[1, 3, 6, 5], [1, 1, 1, 1], [1, 0, 0, -1]])
     job = 10
-    axis =0
-    [nx,normalPar] = normalize(x,job,axis)
-    print(x)
+    Axis = 0
+    [nX, normalPar] = normalize(X, job, Axis)
+    print(X)
     # print(nx)
-    # print(normalPar)
-    inX = inverseTransform(nx,normalPar,job,axis)
-    print(inX)
+    # print(normal_par)
+    inx = inverse_transform(nX, normalPar, job, Axis)
+    print(inx)
