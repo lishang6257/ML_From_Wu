@@ -9,8 +9,7 @@ shape[0]返回各个维度元素个数
 """
 import numpy as np
 import matplotlib.pyplot as plt
-from utils.normalize import normalize
-from utils.validDataset import validDataset
+import utils
 from dataset.loadhousing import LoadHousing
 
 
@@ -44,7 +43,7 @@ class LinearRegression(object):
 
         self.__plot = np.zeros([self.__maxIter, ])
 
-        [flag, data] = validDataset(data, axis)
+        [flag, data] = utils.valid_dataset(data, axis)
 
         if flag is True:
             self.trainData = data['train']
@@ -82,7 +81,7 @@ class LinearRegression(object):
         self.__normalize_job = normalize_job
 
         if regress_job == 1:
-            xx = normalize(self.trainData['X'], normalize_job)
+            xx = utils.normalize(self.trainData['X'], normalize_job)
             xx = np.vstack([np.ones([1, self.trainNsample]), xx])
             yy = self.trainData['Y']
 
@@ -112,7 +111,7 @@ class LinearRegression(object):
 
     def test(self):
         if regressJob == 1:
-            xx = normalize(self.testData['X'], self.__normalize_job)
+            xx = utils.normalize(self.testData['X'], self.__normalize_job)
             xx = np.vstack([np.ones([1, self.testNsample]), xx])
             tyy = hypothesis(xx, self.__theta)
             self.testCost = np.sum((tyy - self.testData['Y']) ** 2) / self.testNsample
