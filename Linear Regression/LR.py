@@ -10,7 +10,7 @@ shape[0]返回各个维度元素个数
 import numpy as np
 import matplotlib.pyplot as plt
 import utils
-from dataset.loadhousing import LoadHousing
+import dataset
 
 
 def hypothesis(x, theta):
@@ -55,10 +55,6 @@ class LinearRegression(object):
         else:
             pass
 
-    def __str__(self):
-        print(self.trainData['X'].shape, self.trainData['Y'].shape)
-        return 'init completely'
-
     def set_learning_rate(self, mui):
         self.__LearningRate = mui
 
@@ -92,8 +88,8 @@ class LinearRegression(object):
                 index += 1
                 current_cost = cost(xx, self.__theta, yy)
                 self.__theta -= self.__LearningRate / self.trainNsample \
-                    * np.sum((hypothesis(xx, self.__theta) - yy) * xx, 1).reshape(self.nfeature + 1, 1)\
-                    + self.__regular_term / self.testNsample * self.__theta
+                                * np.sum((hypothesis(xx, self.__theta) - yy) * xx, 1).reshape(self.nfeature + 1, 1) \
+                                + self.__regular_term / self.testNsample * self.__theta
                 delta = abs(last - current_cost)
                 last = current_cost
                 self.__plot[index] = current_cost
@@ -133,7 +129,7 @@ class LinearRegression(object):
 
 
 if __name__ == '__main__':
-    a = LoadHousing()
+    a = dataset.LoadHousing()
     LR = LinearRegression(a.data, 0)
     LR.set_learning_rate(0.1)
     LR.set_max_iteration(1000)
@@ -145,4 +141,3 @@ if __name__ == '__main__':
     tt = LR.test()
     print(LR.testCost)
     LR.plot()
-    print(LR)
