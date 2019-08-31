@@ -2,13 +2,13 @@ import numpy as np
 from dataset.TrainTestDivide import train_test_divide
 
 
-class LoadBreastCancer1(object):
+class LoadBreastCancer3(object):
     def __init__(self):
-        self.ndim = np.array([11, 683])
-        self.__Xrange = np.arange(1, 10)
-        self.__Yrange = np.array([10])
-        self.__data = r'D:\programer\DataSet\ML\breast-cancer-wisconsin\1\breast-cancer-wisconsin.data'
-        self.__attribute = r'D:\programer\DataSet\ML\breast-cancer-wisconsin\1\breast-cancer-wisconsin.attribute'
+        self.ndim = np.array([35, 194])
+        self.__Xrange = np.arange(3, 35)
+        self.__Yrange = np.array([1,2])
+        self.__data = r'D:\programer\DataSet\ML\breast-cancer-wisconsin\3\breast-cancer-wisconsin.data'
+        self.__attribute = r'D:\programer\DataSet\ML\breast-cancer-wisconsin\3\breast-cancer-wisconsin.attribute'
 
         dfile = open(self.__data, 'r')
         data = np.zeros(self.ndim)
@@ -44,6 +44,6 @@ class LoadBreastCancer1(object):
 
 
 if __name__ == '__main__':
-    a = LoadBreastCancer1()
-    print(a.data['test'])
-    print(a.attribute['X'])
+    a = LoadBreastCancer3()
+    print(a.data['test']['Y'].shape)
+    print(a.attribute['Y'])
