@@ -1,0 +1,11 @@
+SCN		Sample code number(id number)
+CT 		Clump Thickness(1 - 10)
+UCSI 	Uniformity of Cell Size(1 - 10)
+UCSH 	Uniformity of Cell Shape(1 - 10)
+MA 		Marginal Adhesion(1 - 10)
+SECE	Single Epithelial Cell Size(1 - 10)
+BN 		Bare Nuclei(1 - 10)
+BC 		Bland Chromatin(1 - 10)
+NN 		Normal Nucleoli(1 - 10)
+Mitoses	Mitoses(1 - 10)
+Class	2:benign 4:malignant

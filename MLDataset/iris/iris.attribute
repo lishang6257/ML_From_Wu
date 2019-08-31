@@ -1,0 +1,5 @@
+SL	sepal length in cm
+SW	sepal width in cm
+PL	petal length in cm
+PW	petal width in cm
+CLASS	1:Iris Setosa	 2:Iris Versicolour 3:Iris Virginica

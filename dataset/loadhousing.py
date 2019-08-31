@@ -7,8 +7,8 @@ class LoadHousing(object):
         self.ndim = np.array([14, 506])
         self.__Xrange = np.arange(0, 13)
         self.__Yrange = np.array([13])
-        self.__data = r'D:\programer\DataSet\ML\housing\housing.data'
-        self.__attribute = r'D:\programer\DataSet\ML\housing\housing.attribute'
+        self.__data = r'..\MLDataset\housing\housing.data'
+        self.__attribute = r'..\MLDataset\housing\housing.attribute'
 
         dfile = open(self.__data, 'r')
         data = np.zeros(self.ndim)

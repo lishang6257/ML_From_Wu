@@ -1,0 +1,35 @@
+ID 			ID number
+Outcome     1:nonrecur 2:recur
+Time 		recurrence time if field 2 = R, disease-free time if field 2 = N
+MR			the mean of radius (mean of distances from center to points on the perimeter)
+MT 			the mean of texture (standard deviation of gray-scale values)
+MP 			the mean of perimeter
+MA 			the mean of area
+MSM			the mean of smoothness (local variation in radius lengths)
+MCOM 		the mean of compactness (perimeter^2 / area - 1.0)
+MC1			the mean of concavity (severity of concave portions of the contour)
+MC2 		the mean of concave points (number of concave portions of the contour)
+MSY 		the mean of symmetry 
+MFD			the mean of fractal dimension ("coastline approximation" - 1)
+SER 		the standard error of radius (mean of distances from center to points on the perimeter)
+SET 		the standard error of texture (standard deviation of gray-scale values)
+SEP 		the standard error of perimeter
+SEA 		the standard error of area
+SESM 		the standard error of smoothness (local variation in radius lengths)
+SECOM 		the standard error of compactness (perimeter^2 / area - 1.0)
+SEC1 		the standard error of concavity (severity of concave portions of the contour)
+SEC2 		the standard error of concave points (number of concave portions of the contour)
+SESY 		the standard error of symmetry 
+SEFD 		the standard error of fractal dimension ("coastline approximation" - 1)
+WR 			the worst radius (mean of distances from center to points on the perimeter)
+WT 			the worst texture (standard deviation of gray-scale values)
+WP 			the worst perimeter
+WA 			the worst area
+WSM 		the worst smoothness (local variation in radius lengths)
+WCOM 		the worst compactness (perimeter^2 / area - 1.0)
+WC1 		the worst concavity (severity of concave portions of the contour)
+WC2 		the worst concave points (number of concave portions of the contour)
+WSY 		the worst symmetry 
+WFD			the worst fractal dimension ("coastline approximation" - 1)
+TS 			Tumor size - diameter of the excised tumor in centimeters
+LNS 		Lymph node status - number of positive axillary lymph nodes observed at time of surgery

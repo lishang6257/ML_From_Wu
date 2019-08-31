@@ -7,8 +7,8 @@ class LoadIris(object):
         self.ndim = np.array([5, 150])
         self.__Xrange = np.arange(0, 4)
         self.__Yrange = np.array([4])
-        self.__data = r'D:\programer\DataSet\ML\iris\iris.data'
-        self.__attribute = r'D:\programer\DataSet\ML\iris\iris.attribute'
+        self.__data = r'..\MLDataset\iris\iris.data'
+        self.__attribute = r'..\MLDataset\iris\iris.attribute'
 
         dfile = open(self.__data, 'r')
         data = np.zeros(self.ndim)

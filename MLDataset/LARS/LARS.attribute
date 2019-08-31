@@ -1,0 +1,11 @@
+AGE	age/year
+SEX	sex 1/2
+BMI	body mass index
+BP	average blood pressure
+S1	1th blood serum measurements
+S2	2th blood serum measurements
+S3	3th blood serum measurements
+S4	4th blood serum measurements
+S5	5th blood serum measurements
+S6	6th blood serum measurements
+y	response variable

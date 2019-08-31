@@ -7,8 +7,8 @@ class LoadLARS(object):
         self.ndim = np.array([11, 442])
         self.__Xrange = np.arange(0, 10)
         self.__Yrange = np.array([10])
-        self.__data = r'D:\programer\DataSet\ML\LARS\LARS.data'
-        self.__attribute = r'D:\programer\DataSet\ML\LARS\LARS.attribute'
+        self.__data = r'..\MLDataset\LARS\LARS.data'
+        self.__attribute = r'..\MLDataset\LARS\LARS.attribute'
 
         dfile = open(self.__data, 'r')
         data = np.zeros(self.ndim)

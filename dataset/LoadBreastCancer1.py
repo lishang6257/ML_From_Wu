@@ -7,8 +7,8 @@ class LoadBreastCancer1(object):
         self.ndim = np.array([11, 683])
         self.__Xrange = np.arange(1, 10)
         self.__Yrange = np.array([10])
-        self.__data = r'D:\programer\DataSet\ML\breast-cancer-wisconsin\1\breast-cancer-wisconsin.data'
-        self.__attribute = r'D:\programer\DataSet\ML\breast-cancer-wisconsin\1\breast-cancer-wisconsin.attribute'
+        self.__data = r'..\MLDataset\breast-cancer-wisconsin\1\breast-cancer-wisconsin.data'
+        self.__attribute = r'..\MLDataset\breast-cancer-wisconsin\1\breast-cancer-wisconsin.attribute'
 
         dfile = open(self.__data, 'r')
         data = np.zeros(self.ndim)
