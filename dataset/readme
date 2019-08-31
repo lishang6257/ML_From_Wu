@@ -1,6 +1,8 @@
 数据经处理后的统一格式如下：
+··· python
 dataset = laodDataset()
 dataset.data
 {'train': {'X': numpy array, 'Y':numpy array},'test': {'X': numpy array, 'Y':numpy array}}
 dataset.attribute
 {'X':{'item1':describe1,'item2':describe2, ... ,'item_n':describe_n}, 'Y':{'item1':describe1,'item2':describe2, ... ,'item_m':describe_m}}
+···
