@@ -2,19 +2,19 @@ import numpy as np
 from dataset.TrainTestDivide import train_test_divide
 
 
-class LoadHousing(object):
+class LoadIris(object):
     def __init__(self):
-        self.ndim = np.array([14, 506])
-        self.__Xrange = np.arange(0, 13)
-        self.__Yrange = np.array([13])
-        self.__data = r'D:\programer\DataSet\ML\housing\housing.data'
-        self.__attribute = r'D:\programer\DataSet\ML\housing\housing.attribute'
+        self.ndim = np.array([14, 178])
+        self.__Xrange = np.arange(1, 14)
+        self.__Yrange = np.array([0])
+        self.__data = r'D:\programer\DataSet\ML\wine\wine.data'
+        self.__attribute = r'D:\programer\DataSet\ML\wine\wine.attribute'
 
         dfile = open(self.__data, 'r')
         data = np.zeros(self.ndim)
         index = 0
         for line in dfile:
-            ldata = line.split()
+            ldata = line.split(',')
             ldata = [float(x) for x in ldata]
             data[:, index] = ldata
             index += 1
@@ -44,6 +44,6 @@ class LoadHousing(object):
 
 
 if __name__ == '__main__':
-    a = LoadHousing()
-    print(a.data['test']['X'])
-    print(a.attribute['X'])
+    a = LoadIris()
+    print(a.data['test'])
+    print(a.attribute['Y'])

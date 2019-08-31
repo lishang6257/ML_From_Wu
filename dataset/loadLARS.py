@@ -2,13 +2,13 @@ import numpy as np
 from dataset.TrainTestDivide import train_test_divide
 
 
-class LoadHousing(object):
+class LoadLARS(object):
     def __init__(self):
-        self.ndim = np.array([14, 506])
-        self.__Xrange = np.arange(0, 13)
-        self.__Yrange = np.array([13])
-        self.__data = r'D:\programer\DataSet\ML\housing\housing.data'
-        self.__attribute = r'D:\programer\DataSet\ML\housing\housing.attribute'
+        self.ndim = np.array([11, 442])
+        self.__Xrange = np.arange(0, 10)
+        self.__Yrange = np.array([10])
+        self.__data = r'D:\programer\DataSet\ML\LARS\LARS.data'
+        self.__attribute = r'D:\programer\DataSet\ML\LARS\LARS.attribute'
 
         dfile = open(self.__data, 'r')
         data = np.zeros(self.ndim)
@@ -44,6 +44,6 @@ class LoadHousing(object):
 
 
 if __name__ == '__main__':
-    a = LoadHousing()
+    a = LoadLARS()
     print(a.data['test']['X'])
     print(a.attribute['X'])

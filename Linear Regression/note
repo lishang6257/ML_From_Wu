@@ -11,4 +11,5 @@
  2. dict 在py3中并没有has_key 这一属性值
  3. 1*m  *  n*m 在numpy是有效的，指数乘
  4. numpy 中的矩阵乘法用dot求解
- 5. numpy 中的伪逆为 np.lin
+ 5. numpy 中的伪逆为 np.linalg.pinv
+ ldata = [float(x) for x in ldata]
