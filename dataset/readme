@@ -1,5 +1,5 @@
 数据经处理后的统一格式如下：
-``` python
+```python
 dataset = laodDataset()
 dataset.data
 {'train': {'X': numpy array, 'Y':numpy array},'test': {'X': numpy array, 'Y':numpy array}}
