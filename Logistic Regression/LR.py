@@ -60,6 +60,19 @@ class LogisticRegression(object):
         self.__maxIter = iteration
         self.__plot = np.zeros([iteration, ])
 
+    def train(self, regress_job=1, regular_term=1, nomalize_job=1):
+        if regress_job == 1: # 梯度下降法
+            iteration = -1
+            delta = cost(xx, self.__theta, yy) + 1000
+            while (iteration < self.__maxIter) & (delta < self.__Epsilon):
+                iteration += 1
+                current_cost = cost(xx,self.__theta,yy)
+                self.__theta
+                delta
+
+
+
+
 
 if __name__ == '__main__':
     LR = dataset.LoadHousing()

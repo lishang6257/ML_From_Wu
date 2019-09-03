@@ -32,6 +32,7 @@ class LinearRegression(object):
         初始化类LR的维度，输入，输出等信息
         """
         self.__maxIter = 200
+        self.__iteration = -1
         self.__Epsilon = 10 ** -3
         self.__LearningRate = 0.005
 
@@ -53,6 +54,7 @@ class LinearRegression(object):
             self.testNsample = self.testData['X'].shape[1]
             self.__theta = np.zeros([self.nfeature + 1, 1])
         else:
+            print("error input")
             pass
 
     def set_learning_rate(self, mui):
@@ -81,18 +83,20 @@ class LinearRegression(object):
             xx = np.vstack([np.ones([1, self.trainNsample]), xx])
             yy = self.trainData['Y']
 
-            index = -1
             delta = 10000
             last = 10000 + cost(xx, self.__theta, yy)
-            while (index < self.__maxIter - 1) & (delta > self.__Epsilon):
-                index += 1
+            while (self.__iteration < self.__maxIter - 1) & (delta > self.__Epsilon):
+                self.__iteration += 1
                 current_cost = cost(xx, self.__theta, yy)
+                # theta_0 需要单独求解
+                theta_0 = self.__regular_term / self.testNsample * self.__theta[0]
                 self.__theta -= self.__LearningRate / self.trainNsample \
                                 * np.sum((hypothesis(xx, self.__theta) - yy) * xx, 1).reshape(self.nfeature + 1, 1) \
                                 + self.__regular_term / self.testNsample * self.__theta
+                self.__theta[0] += theta_0
                 delta = abs(last - current_cost)
                 last = current_cost
-                self.__plot[index] = current_cost
+                self.__plot[self.__iteration] = current_cost
                 # print(delta)
         elif regress_job == 2:
             xx = self.trainData['X'].T
@@ -122,21 +126,27 @@ class LinearRegression(object):
             pass
 
     def plot(self):
-        x = np.arange(0, self.__maxIter)
-        plt.plot(x, self.__plot)
+        x = np.arange(1, self.__iteration)
+        plt.plot(x, self.__plot[1:self.__iteration])
         # plt.legend(), ls="-", lw=2, label="plot figure"
         plt.show()
 
 
 if __name__ == '__main__':
-    a = dataset.LoadHousing()
-    LR = LinearRegression(a.data, 0)
+    path = r"../MLDataset/tmpDataset/tmp.npy"
+    # a = dataset.LoadHousing()
+    # np.save(path,a.data)
+
+    b = np.load(path)
+    data = b.item()
+
+    LR = LinearRegression(data, 0)
     LR.set_learning_rate(0.1)
     LR.set_max_iteration(1000)
     LR.set_epsilon(10 ** -5)
     regressJob = 1
     regularTerm = 0
-    normalizeJob = 2
+    normalizeJob = 1
     LR.train(regressJob, regularTerm, normalizeJob)
     tt = LR.test()
     print(LR.testCost)

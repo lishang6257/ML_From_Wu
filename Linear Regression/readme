@@ -12,4 +12,8 @@
  3. 1*m  *  n*m 在numpy是有效的，指数乘
  4. numpy 中的矩阵乘法用dot求解
  5. numpy 中的伪逆为 np.linalg.pinv
- ldata = [float(x) for x in ldata]
+ 6. ` ldata = [float(x) for x in ldata] `
+ 7. bool型 最好用 ` is `
+ 
+ 
+ 
